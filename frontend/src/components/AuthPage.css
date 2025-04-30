@@ -1,0 +1,109 @@
+/* Full-page background */
+.auth-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #ff7eb3, #ff758c);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  /* Centered login/register box */
+  .auth-box {
+    background: #fff;
+    border-radius: 20px;
+    padding: 30px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    text-align: center;
+  }
+  
+  .tab-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .tab-buttons button {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 10px 0;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    color: #555;
+    transition: all 0.3s ease;
+    border-bottom: 2px solid transparent;
+  }
+  
+  .tab-buttons button.active {
+    color: #e94057;
+    border-color: #e94057;
+  }
+  
+  .auth-box form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .auth-box form h3 {
+    margin-bottom: 20px;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  .auth-box form input {
+    margin-bottom: 15px;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 30px;
+    font-size: 14px;
+    outline: none;
+  }
+  
+  .auth-box form button {
+    background: linear-gradient(135deg, #ff7eb3, #ff758c);
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease;
+  }
+  
+  .auth-box form button:hover {
+    background: linear-gradient(135deg, #e94057, #f27121);
+  }
+  
+  .switch-text {
+    margin-top: 20px;
+    font-size: 14px;
+  }
+  
+  .switch-text span {
+    color: #e94057;
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 5px;
+  }
+  
+  .link {
+    color: #e94057;
+    font-size: 14px;
+    margin-top: 10px;
+    cursor: pointer;
+  }
+  
+  .error-msg {
+    background-color: #ffe6e6;
+    color: #ff3333;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    font-size: 14px;
+  }
+  

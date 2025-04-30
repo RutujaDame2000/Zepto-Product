@@ -1,0 +1,140 @@
+/* Sidebar container */
+.category-sidebar {
+    background-color: #fff;
+    height: 100vh;
+    border-radius: 12px;
+    overflow-y: auto;
+  }
+  
+  /* Each item inside sidebar */
+  .sidebar-item {
+    transition: background-color 0.3s;
+  }
+  
+  /* Hover effect */
+  .sidebar-item:hover {
+    background-color: #f1f1f1;
+  }
+  
+  /* Active category */
+  .active-category {
+    background-color: #f4ebfc;
+    border-left: 4px solid #800080;
+  }
+  
+  /* Category icon style */
+  .sidebar-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  /* Sidebar text */
+  .sidebar-text {
+    font-weight: 500;
+    font-size: 14px;
+  }
+  
+  /* Sidebar */
+.category-sidebar {
+    background-color: #fff;
+    height: 100vh;
+    border-radius: 12px;
+    overflow-y: auto;
+  }
+  
+  /* Sidebar item */
+  .sidebar-item {
+    transition: background-color 0.3s;
+  }
+  
+  /* Hover effect */
+  .sidebar-item:hover {
+    background-color: #f7f7f7;
+  }
+  
+  /* Active category */
+  .active-category {
+    background-color: #f4ebfc;
+    border-left: 4px solid purple;
+  }
+  
+  /* Sidebar icon */
+  .sidebar-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  /* Sidebar text */
+  .sidebar-text {
+    font-weight: 500;
+    font-size: 14px;
+  }
+  
+  /* Product Card Hover Effect */
+  .product-card:hover {
+    transform: scale(1.02);
+    transition: all 0.3s ease;
+  }
+  
+  /* Discount badge */
+  .discount-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: purple;
+    color: white;
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  
+  /* Breadcrumb */
+  .breadcrumb {
+    background: transparent;
+    font-size: 14px;
+    padding-left: 0;
+    margin-bottom: 1rem;
+  }
+  
+  .product-card {
+    border-radius: 12px;
+    transition: all 0.3s ease;
+  }
+  
+  .product-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-5px);
+  }
+  
+  .discount-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: purple;
+    color: white;
+    padding: 2px 6px;
+    font-size: 12px;
+    border-radius: 5px;
+    font-weight: 600;
+  }
+  
+  .sidebar-icon {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+  }
+  
+  .sidebar-item:hover {
+    background: #f5f5f5;
+  }
+  
+  .sidebar-text {
+    font-size: 14px;
+    font-weight: 600;
+  }
+  

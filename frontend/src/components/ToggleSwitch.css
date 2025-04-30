@@ -1,0 +1,70 @@
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 110px; /* ⬅️ New Oval Width */
+    height: 44px; /* ⬅️ Slightly increased height for better text fitting */
+  }
+  
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  /* Outer Oval Shape */
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    background-color: rgb(183, 181, 181); /* Always gray */
+    border-radius: 50px; /* Oval Roundness */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transition: 0.4s;
+    overflow: hidden;
+  }
+  
+  /* Moving Circle inside */
+  .slider::before {
+    content: "";
+    position: absolute;
+    height: 38px; /* ⬅️ Circle adjusted to fit inside nicely */
+    width: 38px;
+    left: 4px;
+    top: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+  }
+  
+  /* When checked - Circle moves to right and becomes green */
+  input:checked + .slider::before {
+    transform: translateX(58px); /* ⬅️ Updated to match 110px width */
+    background-color: #28a745; /* Green Circle */
+  }
+  
+ /* Text inside toggle */
+.switch-text {
+    position: absolute;
+    right: 10px; /* ⬅️ Text initial position */
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px; /* Increased font size */
+    font-weight: bold;
+    color: white;
+    text-align: left;
+    transition: 0.4s;
+    line-height: 1.2;
+    text-shadow: 1px 1px 2px black;/* ⬅️ Added Black Shadow */
+  }
+  
+  
+  /* When checked - text moves left and becomes green */
+  .switch-text.active {
+    left: 10px;
+    right: auto;
+    color: #28a745; /* Green Text when ON */
+  }
+  

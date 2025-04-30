@@ -1,0 +1,190 @@
+
+
+.category-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+
+/* Hide scrollbar */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Hide bottom scrollbar */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Active category purple underline */
+.active-category span {
+  color: purple;
+  border-bottom: 2px solid purple;
+}
+
+/* Hide Scrollbar completely */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.paan-banner {
+  background: linear-gradient(to right, #00c3e3, #1dc6df);
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.paan-banner-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.deals-banner {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.deals-left {
+  background-color: #000; /* Black background for Super Sonic */
+}
+
+.deals-right {
+  background: linear-gradient(to bottom, #ffdce0, #ffeef0); /* Light pink for Beauty Lit */
+}
+
+/* Hide bottom scrollbar in slider */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none; 
+  scrollbar-width: none;
+}
+
+/* Deals card styling */
+.deals-card {
+  flex: 0 0 auto;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.deals-banner img {
+  display: block;
+}
+
+/* Hide scrollbar */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Top Categories Style */
+.category-box {
+  padding: 10px 15px;
+  background: white;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+.category-box:hover {
+  background: #f2f2f2;
+}
+
+/* Active top category */
+.active-category {
+  background: #f7e1ff;
+}
+
+/* Fruits Categories style */
+.text-center img {
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+.text-center img:hover {
+  transform: scale(1.05);
+}
+
+/* Deal Cards */
+.deals-card img {
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+/* Banner Section */
+.paan-banner img {
+  width: 100%;
+  border-radius: 12px;
+  margin-top: 10px;
+}
+
+/* Info Cards (Insurance / Hotstar / Forex) */
+.info-card img {
+  border-radius: 12px;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .category-box span {
+    font-size: 14px;
+  }
+}
+/* Clean scrollbar hiding */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Fruits Categories Clean UI */
+.fruits-category-item {
+  min-width: 110px;
+  cursor: pointer;
+}
+
+.fruits-category-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 5px;
+  transition: transform 0.2s ease;
+}
+
+.fruits-category-card:hover {
+  transform: translateY(-3px); /* Just a slight bounce if you want, optional */
+}
+
+.fruits-category-img {
+  width: 110px;
+  height: 110px;
+  object-fit: contain;
+  margin-bottom: 5px;
+}
+
+.fruits-category-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+}
+

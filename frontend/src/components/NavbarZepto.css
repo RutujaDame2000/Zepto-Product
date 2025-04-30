@@ -1,0 +1,19 @@
+.search-suggestions {
+  max-height: 250px;
+  overflow-y: auto;
+  border-radius: 10px;
+}
+
+.search-suggestion-item:hover {
+  background-color: #f8f9fa;
+  transition: background 0.3s;
+}
+
+.nav-icon-text {
+  font-size: 0.75rem;
+  margin-top: 4px;
+}
+
+.card-img-top {
+  border-radius: 10px;
+}

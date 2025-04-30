@@ -1,0 +1,17 @@
+.account-page {
+  background: #f2f2f2;
+}
+
+.order-card img {
+  height: 80px;
+  width: 80px;
+  object-fit: cover;
+}
+
+.order-card {
+  transition: transform 0.2s;
+}
+
+.order-card:hover {
+  transform: scale(1.03);
+}

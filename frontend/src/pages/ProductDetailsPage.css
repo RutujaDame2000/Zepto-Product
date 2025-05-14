@@ -1,0 +1,33 @@
+.product-detail-container {
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  .main-image img {
+    width: 90%;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px solid #eee;
+  }
+  
+  .small-thumb {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+  }
+  
+  .small-thumb:hover {
+    border: 2px solid #e91e63;
+  }
+  
+  .btn-danger {
+    background-color: #ff3e6c;
+    border: none;
+  }
+  
+  .btn-danger:hover {
+    background-color: #e03560;
+  }
+  
+  

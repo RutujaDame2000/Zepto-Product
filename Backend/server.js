@@ -5,10 +5,13 @@ import dotenv from "dotenv";
 import path from "path";
 import uploadRoutes from "./routes/uploadRoutes.js";
 import { fileURLToPath } from "url";
-
 import authRoutes from "./routes/authRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
-import productRoutes from "./routes/productRoutes.js"; // ✅
+import productRoutes from "./routes/productRoutes.js";
+import userRoutes from './routes/userRoutes.js';
+import checkoutRoutes from "./routes/checkoutRoutes.js";
+import orderRoutes from './routes/orderRoutes.js'
+
 
 
 dotenv.config();
@@ -30,7 +33,11 @@ app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api', profileRoutes);
-app.use('/api/products', productRoutes); // ✅
+app.use('/api/products', productRoutes); 
+app.use('/api/users', userRoutes);
+app.use("/api/checkout", checkoutRoutes);
+app.use("/api/orderRoute", orderRoutes);
+
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,

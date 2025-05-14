@@ -1,0 +1,51 @@
+
+.admin-dashboard-container {
+    background-color: #ffe6f0;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .admin-dashboard-container h3 {
+    color: #d63384;
+    margin-bottom: 20px;
+  }
+  
+  .vendor-select-label {
+    font-weight: bold;
+    color: #7a1c47;
+  }
+  
+  .vendor-select-dropdown {
+    border: 1px solid #d63384;
+    border-radius: 6px;
+  }
+  
+  .admin-vendor-table {
+    margin-top: 20px;
+    background-color: #fff0f5;
+  }
+  
+  .admin-vendor-table th {
+    background-color: #ffccde;
+    color: #7a1c47;
+    font-weight: bold;
+  }
+  
+  .admin-vendor-table td {
+    color: #333;
+  }
+  
+  .add-vendor-form {
+    background-color: #fff0f5;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 30px;
+    border: 1px solid #ffb6c1;
+  }
+  
+  .add-vendor-form h5 {
+    color: #c2185b;
+    margin-bottom: 15px;
+  }
+  

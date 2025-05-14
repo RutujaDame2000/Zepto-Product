@@ -1,216 +1,361 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+
+
+// import React, { useEffect, useState, useCallback } from 'react';
+// import { useParams, useNavigate } from 'react-router-dom';
+// import axios from 'axios';
+// import { useCart } from '../context/cartContext';
+// import categorySlugMapper from '../utils/categorySlugMapper';
+// import sidebarCategoryMapper from '../utils/sidebarCategoryMapper';
+// import Sidebar from '../components/Sidebar';
+// import '../pages/CategoryProducts.css';
+
+// const CategoryPage = () => {
+//   const { categoryName } = useParams();
+//   const navigate = useNavigate();
+
+//   const dbCategoryName = categorySlugMapper[categoryName] || categoryName;
+//   const subcategories = sidebarCategoryMapper[categoryName] || [];
+
+//   const [products, setProducts] = useState([]);
+//   const [filteredProducts, setFilteredProducts] = useState([]);
+//   const [selectedSubCategory, setSelectedSubCategory] = useState('All');
+//   const [sortType, setSortType] = useState('');
+//   const [minPrice, setMinPrice] = useState('');
+//   const [maxPrice, setMaxPrice] = useState('');
+
+//   const { cart, addToCart, removeFromCart } = useCart();
+
+//   // Apply filters function
+//   const applyFilters = useCallback(() => {
+//     let temp = [...products];
+
+//     if (selectedSubCategory !== 'All') {
+//       temp = temp.filter(p => p.category === selectedSubCategory);
+//     }
+
+//     if (minPrice || maxPrice) {
+//       temp = temp.filter(p => {
+//         const price = parseInt(p.price);
+//         return (!minPrice || price >= parseInt(minPrice)) &&
+//                (!maxPrice || price <= parseInt(maxPrice));
+//       });
+//     }
+
+//     if (sortType) {
+//       temp.sort((a, b) => {
+//         const priceA = parseInt(a.price);
+//         const priceB = parseInt(b.price);
+//         return sortType === 'priceLowHigh' ? priceA - priceB : priceB - priceA;
+//       });
+//     }
+
+//     setFilteredProducts(temp);
+//   }, [products, selectedSubCategory, sortType, minPrice, maxPrice]);
+
+//   // Fetch category products on category change
+//   useEffect(() => {
+//     const fetchCategoryProducts = async () => {
+//       try {
+//         const res = await axios.get(`/api/products/category/${encodeURIComponent(dbCategoryName)}`);
+//         setProducts(res.data.products || []);
+//         setFilteredProducts(res.data.products || []);
+//         setSelectedSubCategory('All');
+//         setMinPrice('');
+//         setMaxPrice('');
+//         setSortType('');
+//       } catch (error) {
+//         console.error('Failed to fetch products:', error);
+//         setProducts([]);
+//         setFilteredProducts([]);
+//       }
+//     };
+
+//     fetchCategoryProducts();
+//   }, [dbCategoryName]);
+
+//   // Trigger filtering logic when inputs change
+//   useEffect(() => {
+//     applyFilters();
+//   }, [applyFilters]);
+
+//   const handleClearFilters = () => {
+//     setSelectedSubCategory('All');
+//     setMinPrice('');
+//     setMaxPrice('');
+//     setSortType('');
+//     setFilteredProducts(products);
+//   };
+
+//   return (
+//     <div className="container-fluid my-4">
+//       <div className="row">
+//         {/* Sidebar */}
+//         <div className="col-md-2">
+//           <Sidebar selectedCategory={selectedSubCategory} subcategories={subcategories} />
+//           <div className="p-2">
+//             <h6 className="fw-bold">Price Range</h6>
+//             <input
+//               type="number"
+//               className="form-control mb-2"
+//               placeholder="Min ₹"
+//               value={minPrice}
+//               onChange={(e) => setMinPrice(e.target.value)}
+//             />
+//             <input
+//               type="number"
+//               className="form-control mb-2"
+//               placeholder="Max ₹"
+//               value={maxPrice}
+//               onChange={(e) => setMaxPrice(e.target.value)}
+//             />
+//             <button className="btn btn-primary btn-sm w-100 mb-2" onClick={applyFilters}>Apply</button>
+//             <button className="btn btn-outline-secondary btn-sm w-100" onClick={handleClearFilters}>Reset</button>
+//           </div>
+//         </div>
+
+//         {/* Product Grid */}
+//         <div className="col-md-10">
+//           <div className="d-flex justify-content-between align-items-center mb-3">
+//             <h4 className="fw-bold mb-0">Showing: {selectedSubCategory}</h4>
+//             <select
+//               className="form-select w-auto"
+//               value={sortType}
+//               onChange={(e) => setSortType(e.target.value)}
+//             >
+//               <option value="">Sort By</option>
+//               <option value="priceLowHigh">Price: Low to High</option>
+//               <option value="priceHighLow">Price: High to Low</option>
+//             </select>
+//           </div>
+
+//           <div className="row">
+//             {filteredProducts.length > 0 ? (
+//               filteredProducts.map((product) => (
+//                 <div key={product._id} className="col-6 col-md-3 mb-4">
+//                   <div
+//                     className="card product-card position-relative"
+//                     onClick={() => navigate(`/product/${product._id}`)}
+//                     style={{ cursor: "pointer" }}
+//                   >
+//                     {product.discount && (
+//                       <span className="discount-badge">{product.discount}% Off</span>
+//                     )}
+//                     <img src={product.image} alt={product.name} className="card-img-top" />
+//                     <div className="card-body text-center">
+//                       <h6 className="fw-bold">{product.name}</h6>
+//                       <p className="text-muted">{product.weight}</p>
+//                       <p className="fw-bold">
+//                         ₹{product.price}
+//                         {product.originalPrice && (
+//                           <span className="text-muted text-decoration-line-through ms-2" style={{ fontSize: '13px' }}>
+//                             ₹{product.originalPrice}
+//                           </span>
+//                         )}
+//                       </p>
+//                       <small className="text-muted">🚚 {product.deliveryTime}</small>
+
+//                       {cart[product._id]?.quantity > 0 ? (
+//                         <div className="d-flex justify-content-between mt-2">
+//                           <button className="btn btn-outline-danger btn-sm" onClick={(e) => { e.stopPropagation(); removeFromCart(product._id); }}>-</button>
+//                           <span>{cart[product._id].quantity}</span>
+//                           <button className="btn btn-outline-success btn-sm" onClick={(e) => { e.stopPropagation(); addToCart(product); }}>+</button>
+//                         </div>
+//                       ) : (
+//                         <button className="btn btn-outline-primary btn-sm w-100 mt-2" onClick={(e) => { e.stopPropagation(); addToCart(product); }}>
+//                           Add to Cart
+//                         </button>
+//                       )}
+//                     </div>
+//                   </div>
+//                 </div>
+//               ))
+//             ) : (
+//               <p>No products found.</p>
+//             )}
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default CategoryPage;
+
+
+// ✅ Updated CategoryPage.jsx with object-safe rendering for subcategory
+import React, { useEffect, useState, useCallback } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useCart } from '../context/cartContext';
-import categorySidebars from '../config/categorySidebars';
-import "../pages/CategoryPage.css";
+import categorySlugMapper from '../utils/categorySlugMapper';
+import sidebarCategoryMapper from '../utils/sidebarCategoryMapper';
+import Sidebar from '../components/Sidebar';
+import '../pages/CategoryProducts.css';
 
 const CategoryPage = () => {
   const { categoryName } = useParams();
+  const navigate = useNavigate();
+
+  const dbCategoryName = categorySlugMapper[categoryName] || categoryName;
+  const subcategories = sidebarCategoryMapper[categoryName] || [];
+
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedSubCategory, setSelectedSubCategory] = useState('All');
   const [sortType, setSortType] = useState('');
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
-  const [ratingFilter, setRatingFilter] = useState('');
 
   const { cart, addToCart, removeFromCart } = useCart();
+
+  const applyFilters = useCallback(() => {
+    let temp = [...products];
+    const subCategoryValue = typeof selectedSubCategory === 'object' ? selectedSubCategory.name : selectedSubCategory;
+
+    if (subCategoryValue !== 'All') {
+      temp = temp.filter(p => p.subcategory?.toLowerCase() === subCategoryValue.toLowerCase());
+    }
+
+    if (minPrice || maxPrice) {
+      temp = temp.filter(p => {
+        const price = parseInt(p.price);
+        return (!minPrice || price >= parseInt(minPrice)) &&
+               (!maxPrice || price <= parseInt(maxPrice));
+      });
+    }
+
+    if (sortType) {
+      temp.sort((a, b) => {
+        const priceA = parseInt(a.price);
+        const priceB = parseInt(b.price);
+        return sortType === 'priceLowHigh' ? priceA - priceB : priceB - priceA;
+      });
+    }
+
+    setFilteredProducts(temp);
+  }, [products, selectedSubCategory, sortType, minPrice, maxPrice]);
 
   useEffect(() => {
     const fetchCategoryProducts = async () => {
       try {
-        const res = await axios.get(`/api/products/category/${categoryName}`);
-        const categoryFiltered = res.data.products;
-
-        setProducts(categoryFiltered);
-        setFilteredProducts(categoryFiltered);
+        const res = await axios.get(`/api/products/category/${encodeURIComponent(dbCategoryName)}`);
+        setProducts(res.data.products || []);
+        setFilteredProducts(res.data.products || []);
+        setSelectedSubCategory('All');
+        setMinPrice('');
+        setMaxPrice('');
+        setSortType('');
       } catch (error) {
-        console.error('Failed to fetch products', error);
+        console.error('Failed to fetch products:', error);
+        setProducts([]);
+        setFilteredProducts([]);
       }
     };
 
     fetchCategoryProducts();
-  }, [categoryName]);
+  }, [dbCategoryName]);
 
-  const handleSubCategoryClick = (subCat) => {
-    setSelectedSubCategory(subCat);
-  };
-
-  const handleSortChange = (e) => {
-    const selectedSort = e.target.value;
-    setSortType(selectedSort);
-
-    const extractPrice = (price) =>
-      parseInt(price.toString().replace(/[^\d]/g, ""));
-
-    let sorted = [...filteredProducts];
-
-    if (selectedSort === "priceLowHigh") {
-      sorted.sort((a, b) => extractPrice(a.price) - extractPrice(b.price));
-    } else if (selectedSort === "priceHighLow") {
-      sorted.sort((a, b) => extractPrice(b.price) - extractPrice(a.price));
-    } else if (selectedSort === "ratingHighLow") {
-      sorted.sort((a, b) => b.rating - a.rating);
-    }
-
-    setFilteredProducts(sorted);
-  };
-
-  const handlePriceFilter = () => {
-    if (minPrice === '' && maxPrice === '') return;
-
-    const priceFiltered = products.filter(product => {
-      const price = parseInt(product.price.toString().replace(/[^\d]/g, ""));
-      if (minPrice && maxPrice) {
-        return price >= parseInt(minPrice) && price <= parseInt(maxPrice);
-      } else if (minPrice) {
-        return price >= parseInt(minPrice);
-      } else if (maxPrice) {
-        return price <= parseInt(maxPrice);
-      }
-      return true;
-    });
-
-    setFilteredProducts(priceFiltered);
-  };
-
-  const handleRatingFilter = (minRating) => {
-    setRatingFilter(minRating);
-    const ratingFiltered = products.filter(product => product.rating >= minRating);
-    setFilteredProducts(ratingFiltered);
-  };
+  useEffect(() => {
+    applyFilters();
+  }, [applyFilters]);
 
   const handleClearFilters = () => {
+    setSelectedSubCategory('All');
     setMinPrice('');
     setMaxPrice('');
-    setRatingFilter('');
     setSortType('');
     setFilteredProducts(products);
   };
 
-  const subFilteredProducts = selectedSubCategory === "All"
-    ? filteredProducts
-    : filteredProducts.filter((p) => p.category === selectedSubCategory);
-
   return (
     <div className="container-fluid my-4">
       <div className="row">
-
-        {/* Sidebar */}
-        <div className="col-md-2 category-sidebar p-3">
-          <h5 className="fw-bold mb-3">{categoryName}</h5>
-          {categorySidebars[categoryName]?.map((subCat, idx) => (
-            <div
-              key={idx}
-              className={`sidebar-item p-2 rounded mb-2 ${selectedSubCategory === subCat ? 'active-category' : ''}`}
-              style={{ cursor: 'pointer' }}
-              onClick={() => handleSubCategoryClick(subCat)}
+        <div className="col-md-2">
+          <Sidebar selectedCategory={selectedSubCategory} subcategories={subcategories} />
+          <div className="p-2">
+            <h6 className="fw-bold">Subcategory</h6>
+            <select
+              className="form-select mb-2"
+              value={typeof selectedSubCategory === 'object' ? selectedSubCategory.name : selectedSubCategory}
+              onChange={(e) => {
+                const selected = subcategories.find(sub => sub.name === e.target.value);
+                setSelectedSubCategory(selected || e.target.value);
+              }}
             >
-              {subCat}
-            </div>
-          ))}
+              <option value="All">All</option>
+              {subcategories.map((sub, index) => (
+                <option key={index} value={sub.name}>{sub.name}</option>
+              ))}
+            </select>
 
-          <hr />
-          {/* Price Range Filter */}
-          <h6 className="fw-bold mt-4">Price Range</h6>
-          <input
-            type="number"
-            className="form-control mb-2"
-            placeholder="Min ₹"
-            value={minPrice}
-            onChange={(e) => setMinPrice(e.target.value)}
-          />
-          <input
-            type="number"
-            className="form-control mb-2"
-            placeholder="Max ₹"
-            value={maxPrice}
-            onChange={(e) => setMaxPrice(e.target.value)}
-          />
-          <button className="btn btn-primary btn-sm w-100 mb-2" onClick={handlePriceFilter}>
-            Apply Price
-          </button>
-
-          <hr />
-          {/* Rating Filter */}
-          <h6 className="fw-bold mt-4">Rating</h6>
-          <div className="d-grid gap-2">
-            {[4, 3, 2].map((star) => (
-              <button
-                key={star}
-                className="btn btn-outline-dark btn-sm"
-                onClick={() => handleRatingFilter(star)}
-              >
-                {star}★ & above
-              </button>
-            ))}
+            <h6 className="fw-bold">Price Range</h6>
+            <input
+              type="number"
+              className="form-control mb-2"
+              placeholder="Min ₹"
+              value={minPrice}
+              onChange={(e) => setMinPrice(e.target.value)}
+            />
+            <input
+              type="number"
+              className="form-control mb-2"
+              placeholder="Max ₹"
+              value={maxPrice}
+              onChange={(e) => setMaxPrice(e.target.value)}
+            />
+            <button className="btn btn-primary btn-sm w-100 mb-2" onClick={applyFilters}>Apply</button>
+            <button className="btn btn-outline-secondary btn-sm w-100" onClick={handleClearFilters}>Reset</button>
           </div>
-
-          <button className="btn btn-danger btn-sm w-100 mt-3" onClick={handleClearFilters}>
-            Clear All Filters
-          </button>
         </div>
 
-        {/* Products */}
         <div className="col-md-10">
           <div className="d-flex justify-content-between align-items-center mb-3">
-            <h4 className="fw-bold mb-0">Showing: {selectedSubCategory}</h4>
-            <div className="d-flex align-items-center gap-2">
-              <select
-                className="form-select w-auto"
-                onChange={handleSortChange}
-                value={sortType}
-              >
-                <option value="">Sort By</option>
-                <option value="priceLowHigh">Price: Low to High</option>
-                <option value="priceHighLow">Price: High to Low</option>
-                <option value="ratingHighLow">Rating: High to Low</option>
-              </select>
-            </div>
+            <h4 className="fw-bold mb-0">Showing: {typeof selectedSubCategory === 'object' ? selectedSubCategory.name : selectedSubCategory}</h4>
+            <select
+              className="form-select w-auto"
+              value={sortType}
+              onChange={(e) => setSortType(e.target.value)}
+            >
+              <option value="">Sort By</option>
+              <option value="priceLowHigh">Price: Low to High</option>
+              <option value="priceHighLow">Price: High to Low</option>
+            </select>
           </div>
 
-          {sortType && (
-            <div className="alert alert-info py-1 px-3 mb-3" style={{ width: 'fit-content' }}>
-              <small>Sorting by:
-                {sortType === 'priceLowHigh' && ' Price Low to High'}
-                {sortType === 'priceHighLow' && ' Price High to Low'}
-                {sortType === 'ratingHighLow' && ' Rating High to Low'}
-              </small>
-            </div>
-          )}
-
           <div className="row">
-            {subFilteredProducts.length > 0 ? (
-              subFilteredProducts.map((product) => (
+            {filteredProducts.length > 0 ? (
+              filteredProducts.map((product) => (
                 <div key={product._id} className="col-6 col-md-3 mb-4">
-                  <div className="card product-card shadow-sm h-100">
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="card-img-top"
-                      style={{ height: '160px', objectFit: 'cover', borderRadius: '10px 10px 0 0' }}
-                    />
-                    <div className="card-body text-center p-2">
-                      <h6 className="card-title fw-bold mb-2" style={{ fontSize: "15px" }}>
-                        {product.name}
-                      </h6>
-                      <p className="text-muted mb-1" style={{ fontSize: "14px" }}>{product.weight}</p>
-                      <p className="fw-bold" style={{ fontSize: "14px" }}>{product.price}</p>
-                      <div style={{ fontSize: "12px", color: "gray" }}>🚚 {product.deliveryTime}</div>
+                  <div
+                    className="card product-card position-relative"
+                    onClick={() => navigate(`/product/${product._id}`)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    {product.discount && (
+                      <span className="discount-badge">{product.discount}% Off</span>
+                    )}
+                    <img src={product.image} alt={product.name} className="card-img-top" />
+                    <div className="card-body text-center">
+                      <h6 className="fw-bold">{product.name}</h6>
+                      <p className="text-muted">{product.weight}</p>
+                      <p className="fw-bold">
+                        ₹{product.price}
+                        {product.originalPrice && (
+                          <span className="text-muted text-decoration-line-through ms-2" style={{ fontSize: '13px' }}>
+                            ₹{product.originalPrice}
+                          </span>
+                        )}
+                      </p>
+                      <small className="text-muted">🚚 {product.deliveryTime}</small>
 
                       {cart[product._id]?.quantity > 0 ? (
-                        <div className="d-flex align-items-center justify-content-between mt-2">
-                          <button className="btn btn-outline-danger btn-sm" onClick={() => removeFromCart(product._id)}>
-                            -
-                          </button>
-                          <span className="mx-2 fw-bold">{cart[product._id].quantity}</span>
-                          <button className="btn btn-outline-success btn-sm" onClick={() => addToCart(product)}>
-                            +
-                          </button>
+                        <div className="d-flex justify-content-between mt-2">
+                          <button className="btn btn-outline-danger btn-sm" onClick={(e) => { e.stopPropagation(); removeFromCart(product._id); }}>-</button>
+                          <span>{cart[product._id].quantity}</span>
+                          <button className="btn btn-outline-success btn-sm" onClick={(e) => { e.stopPropagation(); addToCart(product); }}>+</button>
                         </div>
                       ) : (
-                        <button className="btn btn-success w-100 btn-sm mt-2" onClick={() => addToCart(product)}>
+                        <button className="btn btn-outline-primary btn-sm w-100 mt-2" onClick={(e) => { e.stopPropagation(); addToCart(product); }}>
                           Add to Cart
                         </button>
                       )}
@@ -219,7 +364,7 @@ const CategoryPage = () => {
                 </div>
               ))
             ) : (
-              <p>No products found for selected filters.</p>
+              <p>No products found.</p>
             )}
           </div>
         </div>

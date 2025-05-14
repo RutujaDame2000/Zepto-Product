@@ -15,3 +15,18 @@
 .order-card:hover {
   transform: scale(1.03);
 }
+
+button.btn-outline-danger {
+  white-space: nowrap;
+  padding: 6px 12px;
+  font-size: 14px;
+}
+.order-again-btn {
+  white-space: nowrap;
+  padding: 6px 16px;
+  font-size: 14px;
+  border-radius: 6px;
+  height: auto;
+  display: inline-block;
+  line-height: 1.5;
+}

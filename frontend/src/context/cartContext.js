@@ -1,4 +1,4 @@
-// src/context/CartContext.jsx
+
 import React, { createContext, useContext, useState } from "react";
 
 const CartContext = createContext();
@@ -9,13 +9,25 @@ export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState({});
 
   const addToCart = (product) => {
-    setCart((prev) => ({
-      ...prev,
-      [product._id]: {
-        ...product,
-        quantity: (prev[product._id]?.quantity || 0) + 1,
-      },
-    }));
+    setCart((prev) => {
+      const existingQty = prev[product._id]?.quantity || 0;
+
+      if (existingQty >= product.stock) {
+        alert("❌ Product stock limit reached. No more items can be added.");
+        return prev;
+      }
+
+      return {
+        ...prev,
+        [product._id]: {
+          ...product,
+          price: typeof product.price === "string"
+            ? parseFloat(product.price.replace(/[^\d.]/g, ""))
+            : product.price,
+          quantity: existingQty + 1,
+        },
+      };
+    });
   };
 
   const removeFromCart = (productId) => {

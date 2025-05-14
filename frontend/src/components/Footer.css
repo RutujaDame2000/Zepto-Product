@@ -1,0 +1,89 @@
+/* Zepto Footer Base */
+.zepto-footer {
+    background-color: #fafafa;
+    font-size: 14px;
+    color: #555;
+    padding: 2rem 1rem;
+  }
+  
+  .zepto-footer h4,
+  .zepto-footer h6 {
+    color: #111;
+    font-weight: 600;
+  }
+  
+  .zepto-footer .card {
+    transition: transform 0.2s ease-in-out;
+  }
+  .zepto-footer .card:hover {
+    transform: translateY(-4px);
+  }
+  
+  /* Social Icons */
+  .zepto-footer i {
+    font-size: 18px;
+    color: #555;
+    transition: color 0.3s;
+    cursor: pointer;
+  }
+  .zepto-footer i:hover {
+    color: #e0005a;
+  }
+  
+  /* Category Links */
+  .zepto-footer a {
+    color: #555;
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+  }
+  .zepto-footer a:hover {
+    color: #e0005a;
+    text-decoration: underline;
+  }
+  
+  /* Footer Columns */
+  .zepto-footer ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  .zepto-footer li {
+    margin-bottom: 6px;
+  }
+  
+  /* Download App Images */
+  .zepto-footer img[alt="Play Store"],
+  .zepto-footer img[alt="App Store"] {
+    max-width: 150px;
+  }
+  
+  /* Responsive Tweaks */
+  @media (max-width: 768px) {
+    .zepto-footer h4 {
+      font-size: 18px;
+    }
+  
+    .zepto-footer h6 {
+      font-size: 16px;
+    }
+  
+    .zepto-footer .card {
+      margin-bottom: 1rem;
+    }
+  
+    .zepto-footer .footer-grid,
+    .zepto-footer .footer-links {
+      flex-direction: column;
+    }
+  }
+  
+  .zepto-footer a i {
+    font-size: 20px;
+    color: #555;
+    transition: color 0.3s ease;
+  }
+  
+  .zepto-footer a:hover i {
+    color: #e0005a;
+  }
+  
+  

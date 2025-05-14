@@ -1,0 +1,54 @@
+/* AddressModal.css */
+
+.modal-content {
+    border-radius: 16px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+    font-family: "Segoe UI", sans-serif;
+  }
+  
+  .modal-header {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  
+  .modal-title {
+    font-weight: 600;
+    font-size: 18px;
+  }
+  
+  .btn-outline-danger {
+    font-weight: 500;
+    font-size: 15px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-outline-danger:hover {
+    background-color: #ff4d4d;
+    color: white;
+  }
+  
+  .saved-address-box {
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: flex-start;
+  }
+  
+  .saved-address-box .icon {
+    font-size: 18px;
+    margin-right: 10px;
+    color: #dc3545;
+  }
+  
+  .saved-address-box strong {
+    font-size: 15px;
+  }
+  
+  .saved-address-box .text-muted {
+    font-size: 13px;
+  }
+  

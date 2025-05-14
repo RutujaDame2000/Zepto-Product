@@ -1,0 +1,71 @@
+
+
+/* VendorAddProductPage.css */
+
+body {
+    background-color: #e69eb6; /* light pink */
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .card {
+    background: #ffffff;
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(236, 46, 116, 0.1);
+    padding: 30px;
+  }
+  
+  .card h3 {
+    font-weight: 600;
+    color: #ff0862;
+    text-align: center;
+    margin-bottom: 25px;
+  }
+  
+  form .form-label {
+    font-weight: 500;
+    color: #444;
+  }
+  
+  form .form-control {
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    padding: 10px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  form .form-control:focus {
+    border-color: #ff0862;
+    box-shadow: 0 0 0 0.2rem rgba(255, 8, 98, 0.15);
+  }
+  
+  form .form-group {
+    margin-bottom: 1.4rem;
+  }
+  
+  button[type="submit"] {
+    background-color: #ff0862;
+    border: none;
+    color: white;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 10px;
+    width: 100%;
+    transition: background-color 0.3s ease;
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #e00655;
+  }
+  
+  textarea.form-control {
+    resize: vertical;
+    min-height: 100px;
+  }
+  

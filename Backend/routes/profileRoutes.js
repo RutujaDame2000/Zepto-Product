@@ -1,13 +1,12 @@
-
 import express from 'express';
-import { protect } from '../middleware/authMiddleware.js';
+import { authenticateToken } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-// @desc    Get user profile
+// ✅ GET user profile
 // @route   GET /api/profile
-// @access  Private (need JWT)
-router.get('/profile', protect, async (req, res) => {
+// @access  Private
+router.get('/profile', authenticateToken, async (req, res) => {
   if (req.user) {
     res.json({
       _id: req.user._id,
@@ -21,9 +20,10 @@ router.get('/profile', protect, async (req, res) => {
   }
 });
 
-// Add this in your profileRoutes.js
-
-router.put('/profile/update', protect, async (req, res) => {
+// ✅ UPDATE user profile
+// @route   PUT /api/profile/update
+// @access  Private
+router.put('/profile/update', authenticateToken, async (req, res) => {
   const { name } = req.body;
 
   if (!name) {
@@ -31,16 +31,15 @@ router.put('/profile/update', protect, async (req, res) => {
   }
 
   try {
-    const user = await req.user;
+    const user = req.user;
     user.name = name;
     await user.save();
 
     res.json({ success: true, message: 'Profile updated successfully' });
   } catch (error) {
-    console.error('Profile update error:', error);
+    console.error('❌ Profile update error:', error);
     res.status(500).json({ success: false, message: 'Failed to update profile' });
   }
 });
-
 
 export default router;

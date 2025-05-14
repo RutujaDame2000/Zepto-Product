@@ -1,0 +1,26 @@
+.modal-header {
+  border-bottom: none;
+}
+.modal-title {
+  font-weight: 700;
+  font-size: 20px;
+}
+.modal-body p {
+  margin-bottom: 10px;
+}
+.modal-body small {
+  font-size: 13px;
+  color: #555;
+}
+.modal-footer {
+  border-top: none;
+}
+.modal-content {
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+}
+input[type='text'] {
+  border-radius: 8px;
+  padding: 10px;
+}

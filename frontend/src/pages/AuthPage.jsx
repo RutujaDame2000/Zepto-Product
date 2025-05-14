@@ -16,6 +16,8 @@ const AuthPage = () => {
 
   const [resetEmail, setResetEmail] = useState('');
   const [error, setError] = useState('');
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
+const [showRegisterPassword, setShowRegisterPassword] = useState(false);
 
   const [registerData, setRegisterData] = useState({
     name: '', email: '', password: '', phone: '', role: 'user'
@@ -25,21 +27,34 @@ const AuthPage = () => {
     setTab(defaultTab);
   }, [defaultTab]);
 
-  // ✅ Login Handler
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await axios.post('/api/auth/login', loginData);
+ // ✅ Login Handler
+ const handleLogin = async (e) => {
+  e.preventDefault();
+  try {
+    const res = await axios.post('/api/auth/login', loginData);
 
-      localStorage.setItem('token', res.data.token);
-      localStorage.setItem('user', JSON.stringify(res.data.user));
+    const { token, user } = res.data;
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(user));
 
-      toast.success('Login successful!', { autoClose: 2000 });
-      navigate('/'); // redirect to homepage
-    } catch (err) {
-      toast.error(err.response?.data?.message || 'Login failed');
+    toast.success('Login successful!', { autoClose: 2000 });
+
+    // ✅ Correct role-based navigation
+    if (user.role === 'admin') {
+      navigate('/admin/dashboard'); // ✅ Fixed here
+    } else if (user.role === 'vendor') {
+      navigate('/vendor/dashboard');
+    } else {
+      // navigate('/account');
+      navigate('/Homepage');
     }
-  };
+
+  } catch (err) {
+    toast.error(err.response?.data?.message || 'Login failed');
+  }
+};
+
+
 
   // ✅ Registration Handler
   const handleRegister = async (e) => {
@@ -100,13 +115,20 @@ const AuthPage = () => {
               onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
               required
             />
-            <input
-              type="password"
-              placeholder="Password"
-              value={loginData.password}
-              onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
-              required
-            />
+          <div className="password-field">
+  <input
+    type={showLoginPassword ? 'text' : 'password'}
+    placeholder="Password"
+    value={loginData.password}
+    onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+    required
+  />
+  <i
+    className={`bi ${showLoginPassword ? 'bi-eye-slash' : 'bi-eye'}`}
+    onClick={() => setShowLoginPassword(!showLoginPassword)}
+  ></i>
+</div>
+
             <p onClick={() => setShowReset(true)} className="link">Forgot password?</p>
             <button type="submit">Login</button>
           </form>
@@ -127,13 +149,20 @@ const AuthPage = () => {
               onChange={(e) => setRegisterData({ ...registerData, email: e.target.value })}
               required
             />
-            <input
-              type="password"
-              placeholder="Password"
-              value={registerData.password}
-              onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })}
-              required
-            />
+         <div className="password-field">
+  <input
+    type={showRegisterPassword ? 'text' : 'password'}
+    placeholder="Password"
+    value={registerData.password}
+    onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })}
+    required
+  />
+  <i
+    className={`bi ${showRegisterPassword ? 'bi-eye-slash' : 'bi-eye'}`}
+    onClick={() => setShowRegisterPassword(!showRegisterPassword)}
+  ></i>
+</div>
+
             <input
               type="text"
               placeholder="Mobile Number"

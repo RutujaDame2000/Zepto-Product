@@ -1,11 +1,14 @@
 
 
-
-
-import React, { useRef, useState } from "react";
-import { Container, Row, Col, Button } from "react-bootstrap";
+import React, { useRef, useState, useEffect } from "react";
+import { Container, Row, Col, Button, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import "../components/Home.css";
+import Footer from "../components/Footer";
+import categorySlugReverseMapper from "../utils/categorySlugReverseMapper";
+import axios from "axios";
+import { useCart } from "../context/cartContext";
+import FloatingCartBar from "../components/FloatingCartBar";
 
 const topCategories = [
   { name: "All", img: "/topCategories/shopping-bag.png" },
@@ -19,6 +22,7 @@ const topCategories = [
   { name: "Fashion", img: "/topCategories/fashion_icon.png" },
   { name: "Deal Zone", img: "/topCategories/dealzone_icon.png" },
   { name: "Baby Store", img: "/topCategories/baby_icon.png" },
+  
 ];
 
 const fruitsCategories = [
@@ -58,14 +62,34 @@ const fruitsCategories = [
   { name: "PaanCorner", img: "/FruitsCategories/Paan.png" },
 ];
 
+const buyAgainCategories = [
+  { label: "All Items", value: "All" },
+  { label: "Fruits & Vegetables", value: "Fruits & Vegetables" },
+  { label: "Dairy Products", value: "Dairy Products" },
+  { label: "Snacks & Drinks", value: "Snacks & Drinks" },
+  { label: "Grocery & Kitchen", value: "Grocery & Kitchen" },
+  { label: "Sweets & Chocolates", value: "Sweets & Chocolates" },
+  { label: "Zepto Cafe", value: "Zepto Cafe" },
+  { label: "Beauty & Personal Care", value: "Beauty & Personal Care" },
+  { label: "Household Essentials", value: "Household Essentials" }
+];
+
 const HomePage = () => {
-  const fruitsScrollRef = useRef(null);
+
+
+    const fruitsScrollRef = useRef(null);
   const [activeCategory, setActiveCategory] = useState("All");
-  const navigate = useNavigate();
+
 
   const handleFruitCategoryClick = (categoryName) => {
-    navigate(`/category/${categoryName}`);
+    const slug = categorySlugReverseMapper[categoryName];
+    if (slug) {
+      navigate(`/category/${slug}`);
+    } else {
+      console.warn("No slug found for:", categoryName);
+    }
   };
+  
 
   const scrollRight = () => {
     fruitsScrollRef.current.scrollBy({ left: 200, behavior: "smooth" });
@@ -82,10 +106,41 @@ const HomePage = () => {
     }
   };
 
+  const [products, setProducts] = useState([]);
+
+
+
+  const navigate = useNavigate();
+  const { cart, addToCart, removeFromCart } = useCart();
+
+  const [selectedBuyAgain, setSelectedBuyAgain] = useState("All");
+  const [buyAgainProducts, setBuyAgainProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchBuyAgainProducts = async () => {
+      setLoading(true);
+      try {
+        const url =
+          selectedBuyAgain === "All"
+            ? `/api/products`
+            : `/api/products?category=${encodeURIComponent(selectedBuyAgain)}`;
+        const res = await axios.get(url);
+        setBuyAgainProducts(res.data.products);
+      } catch (error) {
+        console.error("Error fetching buy again products:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBuyAgainProducts();
+  }, [selectedBuyAgain]);
+
   return (
-    <Container className="pt-3">
-      {/* Your Scroll bars and Layout code same */}
-      <div
+    <Container className="pt-3 pb-5">
+
+  <div
         className="d-flex overflow-auto p-3 bg-white shadow-sm mb-4 hide-scrollbar"
         style={{ whiteSpace: "nowrap" }}
       >
@@ -96,83 +151,90 @@ const HomePage = () => {
             onClick={() => handleCategoryClick(cat.name)}
             style={{ cursor: "pointer" }}
           >
-            <img src={cat.img} alt={cat.name} style={{ width: "25px", marginRight: "8px" }} />
+            <img
+              src={cat.img}
+              alt={cat.name}
+              style={{ width: "25px", marginRight: "8px" }}
+            />
             <span>{cat.name}</span>
           </div>
         ))}
       </div>
-{/* 
+
       <div
-        className="d-flex overflow-auto px-3 hide-scrollbar"
-        ref={fruitsScrollRef}
-        style={{ whiteSpace: "nowrap" }}
+        className="position-relative bg-white shadow-sm mb-4"
+        style={{ padding: "10px 0" }}
       >
-        {fruitsCategories.map((cat, idx) => (
-          <div
-            key={idx}
-            className="text-center mx-2"
-            style={{ minWidth: "90px", cursor: "pointer" }}
-            onClick={() => handleFruitCategoryClick(cat.name)}
-          >
-            <img src={cat.img} alt={cat.name} style={{ width: "140px", height: "130px" }} />
-          </div>
-        ))}
-      </div> */}
-
-
-
-<div className="position-relative bg-white shadow-sm mb-4" style={{ padding: "10px 0" }}>
-  <div
-    className="d-flex overflow-auto px-3 fruits-scroll hide-scrollbar"
-    style={{ whiteSpace: "nowrap" }}
-    ref={fruitsScrollRef}
-  >
-    {fruitsCategories.map((cat, idx) => (
-      <div
-        key={idx}
-        className="text-center mx-2 fruits-category-item"
-        onClick={() => handleFruitCategoryClick(cat.name)}
-      >
-        <div className="fruits-category-card">
-          <img
-            src={cat.img}
-            alt={cat.name}
-            className="fruits-category-img"
-          />
-          {/* <div className="fruits-category-name">
+        <div
+          className="d-flex overflow-auto px-3 fruits-scroll hide-scrollbar"
+          style={{ whiteSpace: "nowrap" }}
+          ref={fruitsScrollRef}
+        >
+          {fruitsCategories.map((cat, idx) => (
+            <div
+              key={idx}
+              className="text-center mx-2 fruits-category-item"
+              onClick={() => handleFruitCategoryClick(cat.name)}
+            >
+              <div className="fruits-category-card">
+                <img
+                  src={cat.img}
+                  alt={cat.name}
+                  className="fruits-category-img"
+                />
+                {/* <div className="fruits-category-name">
             {cat.name}
           </div> */}
+              </div>
+            </div>
+          ))}
         </div>
+
+        {/* Left Arrow */}
+        <Button
+          variant="light"
+          className="position-absolute top-50 start-0 translate-middle-y ms-2 shadow-sm"
+          style={{
+            borderRadius: "50%",
+            width: "40px",
+            height: "40px",
+            padding: "6px",
+          }}
+          onClick={scrollLeft}
+        >
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/271/271228.png"
+            alt="Left"
+            style={{
+              width: "20px",
+              height: "20px",
+              transform: "rotate(180deg)",
+            }}
+          />
+        </Button>
+
+        {/* Right Arrow */}
+        <Button
+          variant="light"
+          className="position-absolute top-50 end-0 translate-middle-y me-2 shadow-sm"
+          style={{
+            borderRadius: "50%",
+            width: "40px",
+            height: "40px",
+            padding: "6px",
+          }}
+          onClick={scrollRight}
+        >
+          <img
+            src="https://cdn-icons-png.flaticon.com/128/271/271228.png"
+            alt="Right"
+            style={{ width: "20px", height: "20px" }}
+          />
+        </Button>
       </div>
-    ))}
-  </div>
 
-  {/* Left Arrow */}
-  <Button
-    variant="light"
-    className="position-absolute top-50 start-0 translate-middle-y ms-2 shadow-sm"
-    style={{ borderRadius: "50%", width: "40px", height: "40px", padding: "6px" }}
-    onClick={scrollLeft}
-  >
-    <img src="https://cdn-icons-png.flaticon.com/128/271/271228.png" alt="Left" style={{ width: "20px", height: "20px", transform: "rotate(180deg)" }} />
-  </Button>
-
-  {/* Right Arrow */}
-  <Button
-    variant="light"
-    className="position-absolute top-50 end-0 translate-middle-y me-2 shadow-sm"
-    style={{ borderRadius: "50%", width: "40px", height: "40px", padding: "6px" }}
-    onClick={scrollRight}
-  >
-    <img src="https://cdn-icons-png.flaticon.com/128/271/271228.png" alt="Right" style={{ width: "20px", height: "20px" }} />
-  </Button>
-</div>
-
-
-
-
-  {/* Paan Corner Banner */}
-  <div className="paan-banner my-4">
+      {/* Paan Corner Banner */}
+      <div className="paan-banner my-4">
         {/* <div className="paan-banner-content d-flex align-items-center justify-content-between p-4"> */}
         <div>
           <div>
@@ -429,9 +491,104 @@ const HomePage = () => {
               style={{ width: "100%", height: "auto", display: "block" }}
             />
           </div>
-          </Col>
+        </Col>
+      </Row>
+          <div className="my-4 px-2">
+        <h4 className="mb-3 text-purple fw-bold">
+          Buy <span className="text-dark">Again</span>
+        </h4>
+
+        <div className="d-flex overflow-auto hide-scrollbar mb-3">
+          {buyAgainCategories.map((cat, index) => (
+            <Button
+              key={index}
+              variant={selectedBuyAgain === cat.value ? "dark" : "outline-secondary"}
+              size="sm"
+              className="me-2"
+              onClick={() => setSelectedBuyAgain(cat.value)}
+            >
+              {cat.label}
+            </Button>
+          ))}
+        </div>
+
+        {loading && (
+          <div className="text-center my-4">
+            <Spinner animation="border" variant="primary" />
+          </div>
+        )}
+
+        {!loading && (
+          <Row className="g-3">
+            {buyAgainProducts.map((product) => (
+              <Col b key={product._id} md={2} sm={4} xs={6}>
+
+
+                <div
+                  className="p-2 shadow-sv sm bg-white rounded text-center h-100 position-relative"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => navigate(`/product/${product._id}`)}
+                >
+
+
+                  
+                  {product.discount && (
+                    <div className="position-absolute top-0 start-0 bg-purple text-white px-2 py-1 rounded-end" style={{ fontSize: "12px", fontWeight: "bold", zIndex: 1 }}>
+                      {product.discount}% Off
+                    </div>
+                  )}
+
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    style={{ height: "110px", objectFit: "contain" }}
+                    className="mb-2"
+                  />
+
+                  <p className="fw-bold small mb-1">{product.name}</p>
+                  <p className="small text-muted mb-1">{product.weight}</p>
+                  <p className="fw-bold">₹{product.price}</p>
+
+                  {cart[product._id]?.quantity > 0 ? (
+                    <div className="d-flex justify-content-between align-items-center px-3">
+                      <button
+                        className="btn btn-outline-danger btn-sm"
+                        onClick={(e) => { e.stopPropagation(); removeFromCart(product._id); }}
+                      >
+                        −
+                      </button>
+                      <span>{cart[product._id].quantity}</span>
+                      <button
+                        className="btn btn-outline-success btn-sm"
+                        onClick={(e) => { e.stopPropagation(); addToCart(product); }}
+                      >
+                        +
+                      </button>
+                    </div>
+                  ) : (
+                    <Button
+                      variant="success"
+                      size="sm"
+                      className="w-100 mt-2"
+                      onClick={(e) => { e.stopPropagation(); addToCart(product); }}
+                    >
+                      Add to Cart
+                    </Button>
+                  )}
+                </div>
+              </Col>
+
+
+
+
+
+            ))}
           </Row>
-      {/* You can continue your Banner and Deal section */}
+        )}
+      </div>
+
+      <Footer />
+      <FloatingCartBar />
     </Container>
   );
 };

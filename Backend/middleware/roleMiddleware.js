@@ -1,9 +1,13 @@
-export const authorizeRoles = (...allowedRoles) => {
-    return (req, res, next) => {
-      if (!req.user || !allowedRoles.includes(req.user.role)) {
-        return res.status(403).json({ message: 'Access denied: Insufficient role' });
-      }
-      next();
-    };
+export const authorizeRoles = (...roles) => {
+  return (req, res, next) => {
+    const userRole = req.user?.role;
+    if (!roles.includes(userRole)) {
+      console.warn(`🚫 Access denied: Role '${userRole}' is not in allowed roles: [${roles.join(', ')}]`);
+      return res.status(403).json({
+        success: false,
+        message: `Role '${userRole}' is not allowed to access this resource`,
+      });
+    }
+    next();
   };
-  
+};

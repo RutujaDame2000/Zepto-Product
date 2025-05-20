@@ -245,7 +245,7 @@ const CategoryProducts = () => {
                   <div className="card h-100 shadow-sm product-card">
                     <div className="discount-badge">{product.discount}% OFF</div>
                     <img
-                      src={product.image}
+                     img src={`${process.env.REACT_APP_API_URL.replace('/api', '')}${product.image}`}
                       className="card-img-top"
                       alt={product.name}
                       style={{
@@ -295,14 +295,24 @@ const CategoryProducts = () => {
                           </Button>
                         </div>
                       ) : (
-                        <Button
-                          variant="success"
-                          size="sm"
-                          className="w-100 mt-2"
-                          onClick={() => addToCart(product)}
-                        >
-                          Add to Cart
-                        </Button>
+                        // <Button
+                        //   variant="success"
+                        //   size="sm"
+                        //   className="w-100 mt-2"
+                        //   onClick={() => addToCart(product)}
+                        // >
+                        //   Add to Cart
+                        // </Button>
+                        <button
+  className="btn btn-danger w-100"
+  onClick={() => {
+    console.log("Adding to cart product:", product);
+    addToCart(product);
+  }}
+>
+  Add to Cart
+</button>
+
                       )}
                     </div>
                   </div>

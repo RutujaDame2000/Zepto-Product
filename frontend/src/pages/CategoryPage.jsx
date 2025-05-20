@@ -1,188 +1,3 @@
-
-
-// import React, { useEffect, useState, useCallback } from 'react';
-// import { useParams, useNavigate } from 'react-router-dom';
-// import axios from 'axios';
-// import { useCart } from '../context/cartContext';
-// import categorySlugMapper from '../utils/categorySlugMapper';
-// import sidebarCategoryMapper from '../utils/sidebarCategoryMapper';
-// import Sidebar from '../components/Sidebar';
-// import '../pages/CategoryProducts.css';
-
-// const CategoryPage = () => {
-//   const { categoryName } = useParams();
-//   const navigate = useNavigate();
-
-//   const dbCategoryName = categorySlugMapper[categoryName] || categoryName;
-//   const subcategories = sidebarCategoryMapper[categoryName] || [];
-
-//   const [products, setProducts] = useState([]);
-//   const [filteredProducts, setFilteredProducts] = useState([]);
-//   const [selectedSubCategory, setSelectedSubCategory] = useState('All');
-//   const [sortType, setSortType] = useState('');
-//   const [minPrice, setMinPrice] = useState('');
-//   const [maxPrice, setMaxPrice] = useState('');
-
-//   const { cart, addToCart, removeFromCart } = useCart();
-
-//   // Apply filters function
-//   const applyFilters = useCallback(() => {
-//     let temp = [...products];
-
-//     if (selectedSubCategory !== 'All') {
-//       temp = temp.filter(p => p.category === selectedSubCategory);
-//     }
-
-//     if (minPrice || maxPrice) {
-//       temp = temp.filter(p => {
-//         const price = parseInt(p.price);
-//         return (!minPrice || price >= parseInt(minPrice)) &&
-//                (!maxPrice || price <= parseInt(maxPrice));
-//       });
-//     }
-
-//     if (sortType) {
-//       temp.sort((a, b) => {
-//         const priceA = parseInt(a.price);
-//         const priceB = parseInt(b.price);
-//         return sortType === 'priceLowHigh' ? priceA - priceB : priceB - priceA;
-//       });
-//     }
-
-//     setFilteredProducts(temp);
-//   }, [products, selectedSubCategory, sortType, minPrice, maxPrice]);
-
-//   // Fetch category products on category change
-//   useEffect(() => {
-//     const fetchCategoryProducts = async () => {
-//       try {
-//         const res = await axios.get(`/api/products/category/${encodeURIComponent(dbCategoryName)}`);
-//         setProducts(res.data.products || []);
-//         setFilteredProducts(res.data.products || []);
-//         setSelectedSubCategory('All');
-//         setMinPrice('');
-//         setMaxPrice('');
-//         setSortType('');
-//       } catch (error) {
-//         console.error('Failed to fetch products:', error);
-//         setProducts([]);
-//         setFilteredProducts([]);
-//       }
-//     };
-
-//     fetchCategoryProducts();
-//   }, [dbCategoryName]);
-
-//   // Trigger filtering logic when inputs change
-//   useEffect(() => {
-//     applyFilters();
-//   }, [applyFilters]);
-
-//   const handleClearFilters = () => {
-//     setSelectedSubCategory('All');
-//     setMinPrice('');
-//     setMaxPrice('');
-//     setSortType('');
-//     setFilteredProducts(products);
-//   };
-
-//   return (
-//     <div className="container-fluid my-4">
-//       <div className="row">
-//         {/* Sidebar */}
-//         <div className="col-md-2">
-//           <Sidebar selectedCategory={selectedSubCategory} subcategories={subcategories} />
-//           <div className="p-2">
-//             <h6 className="fw-bold">Price Range</h6>
-//             <input
-//               type="number"
-//               className="form-control mb-2"
-//               placeholder="Min ₹"
-//               value={minPrice}
-//               onChange={(e) => setMinPrice(e.target.value)}
-//             />
-//             <input
-//               type="number"
-//               className="form-control mb-2"
-//               placeholder="Max ₹"
-//               value={maxPrice}
-//               onChange={(e) => setMaxPrice(e.target.value)}
-//             />
-//             <button className="btn btn-primary btn-sm w-100 mb-2" onClick={applyFilters}>Apply</button>
-//             <button className="btn btn-outline-secondary btn-sm w-100" onClick={handleClearFilters}>Reset</button>
-//           </div>
-//         </div>
-
-//         {/* Product Grid */}
-//         <div className="col-md-10">
-//           <div className="d-flex justify-content-between align-items-center mb-3">
-//             <h4 className="fw-bold mb-0">Showing: {selectedSubCategory}</h4>
-//             <select
-//               className="form-select w-auto"
-//               value={sortType}
-//               onChange={(e) => setSortType(e.target.value)}
-//             >
-//               <option value="">Sort By</option>
-//               <option value="priceLowHigh">Price: Low to High</option>
-//               <option value="priceHighLow">Price: High to Low</option>
-//             </select>
-//           </div>
-
-//           <div className="row">
-//             {filteredProducts.length > 0 ? (
-//               filteredProducts.map((product) => (
-//                 <div key={product._id} className="col-6 col-md-3 mb-4">
-//                   <div
-//                     className="card product-card position-relative"
-//                     onClick={() => navigate(`/product/${product._id}`)}
-//                     style={{ cursor: "pointer" }}
-//                   >
-//                     {product.discount && (
-//                       <span className="discount-badge">{product.discount}% Off</span>
-//                     )}
-//                     <img src={product.image} alt={product.name} className="card-img-top" />
-//                     <div className="card-body text-center">
-//                       <h6 className="fw-bold">{product.name}</h6>
-//                       <p className="text-muted">{product.weight}</p>
-//                       <p className="fw-bold">
-//                         ₹{product.price}
-//                         {product.originalPrice && (
-//                           <span className="text-muted text-decoration-line-through ms-2" style={{ fontSize: '13px' }}>
-//                             ₹{product.originalPrice}
-//                           </span>
-//                         )}
-//                       </p>
-//                       <small className="text-muted">🚚 {product.deliveryTime}</small>
-
-//                       {cart[product._id]?.quantity > 0 ? (
-//                         <div className="d-flex justify-content-between mt-2">
-//                           <button className="btn btn-outline-danger btn-sm" onClick={(e) => { e.stopPropagation(); removeFromCart(product._id); }}>-</button>
-//                           <span>{cart[product._id].quantity}</span>
-//                           <button className="btn btn-outline-success btn-sm" onClick={(e) => { e.stopPropagation(); addToCart(product); }}>+</button>
-//                         </div>
-//                       ) : (
-//                         <button className="btn btn-outline-primary btn-sm w-100 mt-2" onClick={(e) => { e.stopPropagation(); addToCart(product); }}>
-//                           Add to Cart
-//                         </button>
-//                       )}
-//                     </div>
-//                   </div>
-//                 </div>
-//               ))
-//             ) : (
-//               <p>No products found.</p>
-//             )}
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default CategoryPage;
-
-
-// ✅ Updated CategoryPage.jsx with object-safe rendering for subcategory
 import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -190,6 +5,7 @@ import { useCart } from '../context/cartContext';
 import categorySlugMapper from '../utils/categorySlugMapper';
 import sidebarCategoryMapper from '../utils/sidebarCategoryMapper';
 import Sidebar from '../components/Sidebar';
+import { API, BASE_URL } from '../config/config';
 import '../pages/CategoryProducts.css';
 
 const CategoryPage = () => {
@@ -238,7 +54,7 @@ const CategoryPage = () => {
   useEffect(() => {
     const fetchCategoryProducts = async () => {
       try {
-        const res = await axios.get(`/api/products/category/${encodeURIComponent(dbCategoryName)}`);
+        const res = await axios.get(`${API}/products/category/${encodeURIComponent(dbCategoryName)}`);
         setProducts(res.data.products || []);
         setFilteredProducts(res.data.products || []);
         setSelectedSubCategory('All');
@@ -334,7 +150,23 @@ const CategoryPage = () => {
                     {product.discount && (
                       <span className="discount-badge">{product.discount}% Off</span>
                     )}
-                    <img src={product.image} alt={product.name} className="card-img-top" />
+                    {/* <img
+                      src={product.image ? `${BASE_URL}${product.image}` : 'https://cdn-icons-png.flaticon.com/512/1524/1524855.png'}
+                      alt={product.name}
+                      className="card-img-top"
+                    /> */}
+
+                               <img
+                      src={
+                        product.image?.startsWith("http")
+                          ? product.image
+                          : `${BASE_URL}${product.image}`
+                      }
+                      alt={product.name}
+                      style={{ height: "110px", objectFit: "contain" }}
+                      className="mb-2"
+                    />
+                    
                     <div className="card-body text-center">
                       <h6 className="fw-bold">{product.name}</h6>
                       <p className="text-muted">{product.weight}</p>

@@ -2,7 +2,8 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:5000",
+  "proxy": "http://backend-container:5000",
+
   "dependencies": {
     "@react-google-maps/api": "^2.20.6",
     "@restart/hooks": "^0.6.2",

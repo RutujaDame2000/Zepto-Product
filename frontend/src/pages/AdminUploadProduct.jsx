@@ -12,37 +12,38 @@ const AdminUploadProduct = () => {
     image: null,
   });
 
+  const API = 'http://localhost:5003/api'; // Replace with REACT_APP_API_URL in real deployment
+
   const handleChange = (e) => {
-    if (e.target.name === "image") {
-      setFormData({ ...formData, image: e.target.files[0] });
-    } else {
-      setFormData({ ...formData, [e.target.name]: e.target.value });
-    }
+    const { name, value, files } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: name === "image" ? files[0] : value,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const token = localStorage.getItem("token");
 
     try {
-      // Step 1: Upload image separately
       const imageData = new FormData();
       imageData.append("image", formData.image);
 
-      const uploadRes = await axios.post("/api/upload", imageData, {
-        headers: { "Content-Type": "multipart/form-data" },
+      const uploadRes = await axios.post(`${API}/upload`, imageData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
       });
 
-      const { imagePath } = uploadRes.data; // Get the saved path
+      const { imagePath } = uploadRes.data;
 
-      // Step 2: Save product details along with uploaded imagePath
-      await axios.post("/api/products", {
-        name: formData.name,
-        category: formData.category,
-        price: formData.price,
-        weight: formData.weight,
-        discount: formData.discount,
-        deliveryTime: formData.deliveryTime,
-        image: imagePath,  // ✅ Save uploaded image path
+      await axios.post(`${API}/products`, {
+        ...formData,
+        image: imagePath,
+      }, {
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       alert("Product uploaded successfully!");
@@ -65,35 +66,33 @@ const AdminUploadProduct = () => {
     <div className="container mt-4">
       <h2>Admin Product Upload</h2>
       <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <input type="text" name="name" placeholder="Product Name" className="form-control" value={formData.name} onChange={handleChange} required />
-        </div>
+        {["name", "category", "price", "weight", "discount", "deliveryTime"].map((field) => (
+          <div className="mb-3" key={field}>
+            <input
+              type="text"
+              name={field}
+              placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
+              className="form-control"
+              value={formData[field]}
+              onChange={handleChange}
+              required
+            />
+          </div>
+        ))}
 
         <div className="mb-3">
-          <input type="text" name="category" placeholder="Category" className="form-control" value={formData.category} onChange={handleChange} required />
+          <input
+            type="file"
+            name="image"
+            className="form-control"
+            onChange={handleChange}
+            required
+          />
         </div>
 
-        <div className="mb-3">
-          <input type="text" name="price" placeholder="Price" className="form-control" value={formData.price} onChange={handleChange} required />
-        </div>
-
-        <div className="mb-3">
-          <input type="text" name="weight" placeholder="Weight" className="form-control" value={formData.weight} onChange={handleChange} required />
-        </div>
-
-        <div className="mb-3">
-          <input type="text" name="discount" placeholder="Discount (%)" className="form-control" value={formData.discount} onChange={handleChange} required />
-        </div>
-
-        <div className="mb-3">
-          <input type="text" name="deliveryTime" placeholder="Delivery Time" className="form-control" value={formData.deliveryTime} onChange={handleChange} required />
-        </div>
-
-        <div className="mb-3">
-          <input type="file" name="image" className="form-control" onChange={handleChange} required />
-        </div>
-
-        <button type="submit" className="btn btn-primary">Upload Product</button>
+        <button type="submit" className="btn btn-primary">
+          Upload Product
+        </button>
       </form>
     </div>
   );

@@ -1,0 +1,49 @@
+
+version: '3.8'
+
+services:
+  frontend:
+    container_name: frontend-container
+    build:
+      context: ./frontend
+    ports:
+      - "3001:80"
+    env_file:
+      - ./frontend/.env
+    depends_on:
+      - backend
+    networks:
+      - mern-network
+    restart: always
+
+  backend:
+    container_name: backend-container
+    build:
+      context: ./backend
+    ports:
+      - "5003:5000"
+    environment:
+      - JWT_SECRET=myverysecretjwtkey
+      - MONGO_URI=mongodb://mongo:27017/Zepto
+      - PORT=5000
+    depends_on:
+      - mongo
+    networks:
+      - mern-network
+    restart: always
+
+  mongo:
+    image: mongo
+    container_name: mongo-container
+    # environment:
+    #   -MONGO_INITDB_DATABASE=test2  #database name
+    ports:
+      - "27017:27017"
+    networks:
+      - mern-network
+    restart: always
+
+networks:
+  mern-network:
+    driver: bridge
+

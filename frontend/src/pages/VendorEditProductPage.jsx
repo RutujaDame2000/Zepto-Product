@@ -12,7 +12,7 @@ const VendorEditProductPage = () => {
     const fetchProduct = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await axios.get(`/api/products/${productId}`, {
+        const res = await axios.get(`http://localhost:5003/api/products/${productId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!res.data.product) {
@@ -27,10 +27,9 @@ const VendorEditProductPage = () => {
         navigate('/vendor/dashboard');
       }
     };
-  
+
     fetchProduct();
   }, [productId, navigate]);
-  
 
   const handleChange = (e) => {
     setProduct({ ...product, [e.target.name]: e.target.value });
@@ -40,7 +39,7 @@ const VendorEditProductPage = () => {
     e.preventDefault();
     const token = localStorage.getItem('token');
     try {
-      await axios.put(`/api/products/${productId}`, product, {
+      await axios.put(`http://localhost:5003/api/products/${productId}`, product, {
         headers: { Authorization: `Bearer ${token}` },
       });
       alert('Product updated successfully');
@@ -60,37 +59,68 @@ const VendorEditProductPage = () => {
         <Form onSubmit={handleUpdate}>
           <Form.Group className="mb-3">
             <Form.Label>Product Name</Form.Label>
-            <Form.Control type="text" name="name" value={product.name} onChange={handleChange} required />
+            <Form.Control
+              type="text"
+              name="name"
+              value={product.name}
+              onChange={handleChange}
+              required
+            />
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Category</Form.Label>
-            <Form.Control type="text" name="category" value={product.category} onChange={handleChange} required />
+            <Form.Control
+              type="text"
+              name="category"
+              value={product.category}
+              onChange={handleChange}
+              required
+            />
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Price</Form.Label>
-            <Form.Control type="number" name="price" value={product.price} onChange={handleChange} required />
+            <Form.Control
+              type="number"
+              name="price"
+              value={product.price}
+              onChange={handleChange}
+              required
+            />
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Stock</Form.Label>
-            <Form.Control type="number" name="stock" value={product.stock} onChange={handleChange} required />
+            <Form.Control
+              type="number"
+              name="stock"
+              value={product.stock}
+              onChange={handleChange}
+              required
+            />
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>Description</Form.Label>
-            <Form.Control as="textarea" rows={3} name="description" value={product.description} onChange={handleChange} />
+            <Form.Control
+              as="textarea"
+              rows={3}
+              name="description"
+              value={product.description}
+              onChange={handleChange}
+            />
           </Form.Group>
-          <Button type="submit" variant="primary">Update Product</Button>
+
+          <Form.Group className="mb-3">
+            <Form.Label>Status</Form.Label>
+            <Form.Select name="status" value={product.status} onChange={handleChange}>
+              <option value="Pending">Pending</option>
+              <option value="Active">Active</option>
+            </Form.Select>
+          </Form.Group>
+
+          <Button type="submit" variant="primary">
+            Update Product
+          </Button>
         </Form>
       </Card>
-
-
-      <Form.Group className="mb-3">
-  <Form.Label>Status</Form.Label>
-  <Form.Select name="status" value={product.status} onChange={handleChange}>
-    <option value="Pending">Pending</option>
-    <option value="Active">Active</option>
-  </Form.Select>
-</Form.Group>
-
     </Container>
   );
 };

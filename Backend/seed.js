@@ -532,11 +532,13 @@ const runSeeder = async () => {
       ...driedProducts,
     ];
 
-    const cleanedProducts = allProducts.map((product) => ({
-      ...product,
-      price: parseFloat(product.price.replace("₹", "").trim()),
-      vendor: dummyVendorId,
-    }));
+   const cleanedProducts = allProducts.map((product) => ({
+  ...product,
+  price: parseFloat(product.price.replace("₹", "").trim()),
+  vendor: dummyVendorId,
+  stock: 10, // ✅ Add this line (or any default number)
+}));
+
 
     await Product.deleteMany({});
     const inserted = await Product.insertMany(cleanedProducts);

@@ -1,4 +1,6 @@
 
+
+
 // import React, { useState } from 'react';
 // import axios from 'axios';
 // import { Form, Button, Container, Card } from 'react-bootstrap';
@@ -86,21 +88,11 @@
 //             <Form.Control type="text" name="name" value={product.name} onChange={handleChange} required />
 //           </Form.Group>
 
-//           <Form.Group className="mb-3">
-//             <Form.Label>Category</Form.Label>
-//             <Form.Select name="category" value={product.category} onChange={handleChange} required>
-//               <option value="">Select Category</option>
-//               <option value="Fruits & Vegetables">Fruits & Vegetables</option>
-//               <option value="Dairy & Bakery">Dairy & Bakery</option>
-//               <option value="Snacks & Branded Foods">Snacks & Branded Foods</option>
-//               <option value="Beverages">Beverages</option>
-//             </Form.Select>
-//           </Form.Group>
-
-//           <Form.Group className="mb-3">
-//             <Form.Label>Subcategory</Form.Label>
-//             <Form.Control type="text" name="subcategory" value={product.subcategory} onChange={handleChange} />
-//           </Form.Group>
+//           {/* ✅ Category and Subcategory Dropdowns */}
+//           <VendorCategorySelector
+//             onCategoryChange={(cat) => setProduct(prev => ({ ...prev, category: cat }))}
+//             onSubCategoryChange={(sub) => setProduct(prev => ({ ...prev, subcategory: sub }))}
+//           />
 
 //           <Form.Group className="mb-3">
 //             <Form.Label>Price (₹)</Form.Label>
@@ -152,11 +144,6 @@
 
 //           <Button type="submit" variant="primary">Add Product</Button>
 //         </Form>
-
-//         <VendorCategorySelector
-//   onCategoryChange={(cat) => setProduct(prev => ({ ...prev, category: cat }))}
-//   onSubCategoryChange={(sub) => setProduct(prev => ({ ...prev, subcategory: sub }))}
-//  />
 //       </Card>
 //     </Container>
 //   );
@@ -164,13 +151,13 @@
 
 // export default VendorAddProductPage;
 
-
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Form, Button, Container, Card } from 'react-bootstrap';
+import { Form, Button, Container, Card, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import './VendorAddProductPage.css';
 import VendorCategorySelector from '../components/VendorCategorySelector';
+import { API } from '../config/config'; // ✅ Use your central API URL
 
 const VendorAddProductPage = () => {
   const [product, setProduct] = useState({
@@ -187,6 +174,7 @@ const VendorAddProductPage = () => {
     status: 'Pending',
   });
 
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -200,13 +188,14 @@ const VendorAddProductPage = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.post('/api/products/vendor/upload-image', formData, {
+      const res = await axios.post(`${API}/products/vendor/upload-image`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'multipart/form-data',
         },
       });
-      setProduct({ ...product, image: res.data.imageUrl });
+
+      setProduct((prev) => ({ ...prev, image: res.data.imageUrl }));
     } catch (err) {
       console.error('Image upload failed:', err);
       alert('Failed to upload image');
@@ -218,27 +207,31 @@ const VendorAddProductPage = () => {
     const token = localStorage.getItem('token');
     const user = JSON.parse(localStorage.getItem('user'));
 
-    if (user?.role !== 'vendor') {
+    if (!token || user?.role !== 'vendor') {
       alert('Only vendors can add products.');
       navigate('/');
       return;
     }
 
     try {
-      await axios.post('/api/products/vendor/add', {
-        ...product,
-        vendorId: user._id,
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      setLoading(true);
+      const response = await axios.post(
+        `${API}/products/vendor/add`,
+        { ...product },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-      alert('Product added successfully!');
+      alert('✅ Product added successfully!');
       navigate('/vendor/dashboard');
     } catch (err) {
-      console.error(err);
+      console.error('❌ Add product failed:', err);
       alert('Error adding product.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -252,10 +245,9 @@ const VendorAddProductPage = () => {
             <Form.Control type="text" name="name" value={product.name} onChange={handleChange} required />
           </Form.Group>
 
-          {/* ✅ Category and Subcategory Dropdowns */}
           <VendorCategorySelector
-            onCategoryChange={(cat) => setProduct(prev => ({ ...prev, category: cat }))}
-            onSubCategoryChange={(sub) => setProduct(prev => ({ ...prev, subcategory: sub }))}
+            onCategoryChange={(cat) => setProduct((prev) => ({ ...prev, category: cat }))}
+            onSubCategoryChange={(sub) => setProduct((prev) => ({ ...prev, subcategory: sub }))}
           />
 
           <Form.Group className="mb-3">
@@ -306,7 +298,9 @@ const VendorAddProductPage = () => {
             <Form.Control type="file" onChange={handleImageUpload} />
           </Form.Group>
 
-          <Button type="submit" variant="primary">Add Product</Button>
+          <Button type="submit" variant="primary" disabled={loading}>
+            {loading ? <Spinner animation="border" size="sm" /> : 'Add Product'}
+          </Button>
         </Form>
       </Card>
     </Container>

@@ -1,4 +1,3 @@
-// ✅ OrderSuccess.jsx (with duplicate prevention)
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './OrderSuccess.css';
@@ -8,12 +7,16 @@ const OrderSuccess = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
 
+  // ✅ Auto-detect API base URL (supports both local dev & Docker)
+  const API_BASE = window.location.hostname === 'localhost'
+    ? 'http://localhost:5003/api'
+    : `${process.env.REACT_APP_API_URL || '/api'}`;
+
   useEffect(() => {
     const saveOrder = async () => {
       const query = new URLSearchParams(window.location.search);
       const successParam = query.get('success');
 
-      // ✅ Prevent duplicate saves
       if (successParam === 'true' && !localStorage.getItem('orderSaved')) {
         const rawItems = JSON.parse(localStorage.getItem('cartItems')) || [];
         const storedItems = rawItems.map(item => ({
@@ -27,8 +30,19 @@ const OrderSuccess = () => {
         const storedTotal = Number(localStorage.getItem('cartTotal')) || 0;
         const token = localStorage.getItem('token');
 
+        if (!token) {
+          console.error('❌ No token found in localStorage!');
+          setSuccessMessage('❌ You must be logged in to place an order.');
+          setLoading(false);
+          return;
+        }
+
         try {
-          const response = await fetch('/api/orderRoute/save', {
+          console.log('🔁 Sending order to:', `${API_BASE}/orderRoute/save`);
+          console.log('📦 Order items:', storedItems);
+          console.log('💰 Total amount:', storedTotal);
+
+          const response = await fetch(`${API_BASE}/orderRoute/save`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -41,13 +55,13 @@ const OrderSuccess = () => {
           if (response.ok && data.success) {
             localStorage.removeItem('cartItems');
             localStorage.removeItem('cartTotal');
-            localStorage.setItem('orderSaved', 'true'); // ✅ set flag
+            localStorage.setItem('orderSaved', 'true');
             setSuccessMessage('🎉 Your order has been placed successfully!');
           } else {
             setSuccessMessage(`❌ Order saving failed: ${data.message || 'Server error'}`);
           }
         } catch (err) {
-          console.error('❌ Fetch error:', err);
+          console.error('❌ Fetch error while saving order:', err);
           setSuccessMessage('❌ Order saving failed. Please try again.');
         }
       } else {
@@ -59,7 +73,6 @@ const OrderSuccess = () => {
 
     saveOrder();
 
-    // ✅ Cleanup on unmount
     return () => {
       localStorage.removeItem('orderSaved');
     };

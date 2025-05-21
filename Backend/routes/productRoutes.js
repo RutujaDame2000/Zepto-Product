@@ -1,5 +1,6 @@
-// ✅ productRoutes.js (Updated with case-insensitive category filter)
+// ✅ productRoutes.js
 import express from 'express';
+import mongoose from 'mongoose';
 import Product from '../models/Product.js';
 import { authenticateToken } from '../middleware/authMiddleware.js';
 import { authorizeRoles } from '../middleware/roleMiddleware.js';
@@ -10,8 +11,13 @@ const router = express.Router();
 router.get('/category/:categoryName', async (req, res) => {
   try {
     const { subcategory } = req.query;
-    const categoryRegex = new RegExp(`^${req.params.categoryName}$`, 'i');
-    const filter = { category: categoryRegex };
+    const normalizedCategory = req.params.categoryName.replace(/-/g, " ").toLowerCase();
+
+    const filter = {
+      $expr: {
+        $eq: [{ $toLower: "$category" }, normalizedCategory]
+      }
+    };
 
     if (subcategory) {
       filter.subcategory = new RegExp(`^${subcategory}$`, 'i');
@@ -20,7 +26,7 @@ router.get('/category/:categoryName', async (req, res) => {
     const products = await Product.find(filter);
     res.json({ products });
   } catch (error) {
-    console.error('Error fetching products by category:', error);
+    console.error('❌ Error fetching products by category:', error);
     res.status(500).json({ message: 'Error fetching products' });
   }
 });
@@ -86,6 +92,7 @@ router.post('/vendor/add', authenticateToken, authorizeRoles('vendor'), async (r
     const saved = await newProduct.save();
     res.status(201).json({ success: true, product: saved });
   } catch (error) {
+    console.error('❌ Error adding product:', error);
     res.status(500).json({ success: false, message: 'Failed to add product' });
   }
 });
@@ -96,19 +103,28 @@ router.get('/vendor/products', authenticateToken, authorizeRoles('vendor'), asyn
     const products = await Product.find({ vendor: req.user._id });
     res.json({ success: true, products });
   } catch (error) {
+    console.error('❌ Error fetching vendor products:', error);
     res.status(500).json({ success: false, message: 'Failed to fetch products' });
   }
 });
 
-// ✅ Get product by ID (Public)
+// ✅ Get product by ID (Public with validation)
 router.get('/:id', async (req, res) => {
+  const { id } = req.params;
+
+  // 🔒 Validate MongoDB ObjectId format
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ success: false, message: 'Invalid product ID' });
+  }
+
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(id);
     if (!product) {
       return res.status(404).json({ success: false, message: 'Product not found' });
     }
     res.json({ success: true, product });
   } catch (error) {
+    console.error('❌ Error fetching product by ID:', error);
     res.status(500).json({ success: false, message: 'Server error' });
   }
 });
@@ -117,8 +133,9 @@ router.get('/:id', async (req, res) => {
 router.put('/:id', authenticateToken, async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
-    if (!product)
+    if (!product) {
       return res.status(404).json({ success: false, message: 'Product not found' });
+    }
 
     if (
       req.user.role === 'vendor' &&
@@ -134,6 +151,7 @@ router.put('/:id', authenticateToken, async (req, res) => {
     const updated = await product.save();
     res.json({ success: true, product: updated });
   } catch (error) {
+    console.error('❌ Failed to update product:', error);
     res.status(500).json({ success: false, message: 'Failed to update product' });
   }
 });
@@ -145,24 +163,27 @@ router.delete('/:id', authenticateToken, authorizeRoles('vendor'), async (req, r
       _id: req.params.id,
       vendor: req.user._id,
     });
-    if (!product)
+    if (!product) {
       return res.status(404).json({ success: false, message: 'Not found or unauthorized' });
+    }
 
     res.json({ success: true, message: 'Product deleted' });
   } catch (error) {
+    console.error('❌ Failed to delete product:', error);
     res.status(500).json({ success: false, message: 'Failed to delete product' });
   }
 });
 
+// ✅ Admin Add Product
 router.post('/admin/add', authenticateToken, authorizeRoles('admin'), async (req, res) => {
   try {
     const newProduct = new Product({ ...req.body });
     const saved = await newProduct.save();
     res.status(201).json({ success: true, product: saved });
   } catch (error) {
+    console.error('❌ Admin failed to add product:', error);
     res.status(500).json({ success: false, message: 'Admin failed to add product' });
   }
 });
-
 
 export default router;

@@ -1,6 +1,3 @@
-
-
-// File: ProductDetailsPage.jsx
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
@@ -18,10 +15,7 @@ const ProductDetailsPage = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const token = localStorage.getItem("token");
-        const res = await axios.get(`${API}/products/${productId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await axios.get(`${API}/products/${productId}`);
         setProduct(res.data.product);
       } catch (err) {
         console.error("Error fetching product:", err);
@@ -37,18 +31,23 @@ const ProductDetailsPage = () => {
   if (loading) return <div className="text-center p-5">Loading product details...</div>;
   if (!product || !product._id) return <div className="text-center p-5 text-danger">Product not found.</div>;
 
+  const imageUrl = product.image?.startsWith("http")
+    ? product.image
+    : `${process.env.REACT_APP_API_URL.replace('/api', '')}${product.image.startsWith("/") ? "" : "/"}${product.image}`;
+
   return (
     <div className="container mt-4 product-detail-container">
       <div className="row">
+        {/* LEFT COLUMN */}
         <div className="col-md-5">
           <div className="main-image mb-3">
-            <img src={`${process.env.REACT_APP_API_URL.replace('/api', '')}${product.image}`} alt={product.name} className="img-fluid rounded" />
+            <img src={imageUrl} alt={product.name} className="img-fluid rounded" />
           </div>
           <div className="d-flex gap-2 flex-wrap">
             {[...Array(4)].map((_, idx) => (
               <img
                 key={idx}
-                src={product.image}
+                src={imageUrl}
                 alt="Thumbnail"
                 className="img-thumbnail small-thumb"
               />
@@ -56,6 +55,7 @@ const ProductDetailsPage = () => {
           </div>
         </div>
 
+        {/* RIGHT COLUMN */}
         <div className="col-md-7">
           <h5>{product.name}</h5>
           <p className="text-muted">Net Qty: {product.weight}</p>
@@ -63,14 +63,17 @@ const ProductDetailsPage = () => {
             <span className="badge bg-success me-2">{product.rating || 4.5} ★</span>
             <small className="text-muted">(924 ratings)</small>
           </div>
-          <p className="text-success fw-semibold">⚡ Get in {product.deliveryTime}
-          </p>
+          <p className="text-success fw-semibold">⚡ Get in {product.deliveryTime || "7 Mins"}</p>
           <h4>
-            ₹{product.price} {" "}
-            <span className="text-muted text-decoration-line-through fs-6">
-              ₹{product.originalPrice}
-            </span>{" "}
-            <span className="text-danger fs-6">({product.discount}% Off)</span>
+            ₹{product.price}{" "}
+            {product.originalPrice && (
+              <span className="text-muted text-decoration-line-through fs-6">
+                ₹{product.originalPrice}
+              </span>
+            )}{" "}
+            {product.discount && (
+              <span className="text-danger fs-6">({product.discount}% Off)</span>
+            )}
           </h4>
 
           <hr />
@@ -93,22 +96,12 @@ const ProductDetailsPage = () => {
                 </button>
               </div>
             ) : (
-              // <button
-              //   className="btn btn-danger w-100"
-              //   onClick={() => addToCart(product)}
-              // >
-              //   Add to Cart
-              // </button>
               <button
-  className="btn btn-danger w-100"
-  onClick={() => {
-    console.log("Adding to cart product:", product);
-    addToCart(product);
-  }}
->
-  Add to Cart
-</button>
-
+                className="btn btn-danger w-100"
+                onClick={() => addToCart(product)}
+              >
+                Add to Cart
+              </button>
             )}
           </div>
 
@@ -126,4 +119,3 @@ const ProductDetailsPage = () => {
 };
 
 export default ProductDetailsPage;
-

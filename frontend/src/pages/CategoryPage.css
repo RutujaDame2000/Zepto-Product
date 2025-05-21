@@ -1,56 +1,82 @@
-/* Ensure consistent grid layout */
-.row {
-  margin-left: 0;
-  margin-right: 0;
-}
-
+/* 🧼 Clean card, NO shadow, fixed height */
 .product-card {
-  border: none;
+  border: 1px solid #e0e0e0;
   border-radius: 12px;
-  overflow: hidden;
-  transition: transform 0.2s ease;
+  padding: 10px;
+  height: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
+/* 🚫 Remove any hover effect shadow */
 .product-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  transform: none;
+  box-shadow: none;
 }
 
+/* 🖼️ Product image */
 .card-img-top {
-  border-radius: 0;
-  height: 160px;
-  object-fit: cover;
+  width: 100%;
+  height: 100px;
+  object-fit: contain;
+  margin-bottom: 8px;
+  border-radius: 10px;
 }
 
-/* Responsive padding for cards */
-.card-body {
-  padding: 12px 8px;
-}
-
-.card-body h6 {
-  font-weight: 600;
-  font-size: 15px;
-  color: #333;
-  margin-bottom: 4px;
-}
-
-.card-body p {
-  font-size: 13px;
-  margin: 2px 0;
-}
-
-.card-body small {
-  color: #888;
-  font-size: 11px;
-}
+/* 🏷️ Discount badge */
 .discount-badge {
   position: absolute;
-  top: 8px;
-  left: 8px;
-  background-color: #6933FF;
-  color: #fff;
-  padding: 4px 6px;
-  border-radius: 4px;
+  top: 10px;
+  left: 10px;
   font-size: 12px;
   font-weight: 600;
+  background-color: #8000ff;
+  color: white;
+  padding: 4px 6px;
+  border-radius: 4px;
+}
+
+/* 🛍️ Product info text */
+.product-card h6 {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 4px 0;
+}
+
+.product-card p {
+  font-size: 13px;
+  margin: 0;
+}
+
+.product-card .text-muted {
+  font-size: 12px;
+}
+
+/* 🛒 Red outlined Add to Cart button */
+.product-card .btn {
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 10px;
+  margin-top: 6px;
+}
+
+.product-card .btn-outline-primary {
+  color: #d80073 !important;
+  border: 1.5px solid #d80073 !important;
+  background: transparent;
+}
+
+.product-card .btn-outline-primary:hover {
+  background-color: #d80073 !important;
+  color: white !important;
+}
+
+/* 📏 Force all product cards to be equal height */
+.product-card .card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 180px;
 }

@@ -1,239 +1,136 @@
-
-
-.category-scroll::-webkit-scrollbar {
-  display: none;
-}
-
-
-/* Hide scrollbar */
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.hide-scrollbar {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-}
-
-/* Hide bottom scrollbar */
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.hide-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-/* Active category purple underline */
-.active-category span {
-  color: purple;
-  border-bottom: 2px solid purple;
-}
-
-/* Hide Scrollbar completely */
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
-.hide-scrollbar {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-}
-
-.paan-banner {
-  background: linear-gradient(to right, #00c3e3, #1dc6df);
-  border-radius: 15px;
-  overflow: hidden;
-}
-
-.paan-banner-content {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.deals-banner {
-  background: #fff;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.deals-left {
-  background-color: #000; /* Black background for Super Sonic */
-}
-
-.deals-right {
-  background: linear-gradient(to bottom, #ffdce0, #ffeef0); /* Light pink for Beauty Lit */
-}
-
-/* Hide bottom scrollbar in slider */
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.hide-scrollbar {
-  -ms-overflow-style: none; 
-  scrollbar-width: none;
-}
-
-/* Deals card styling */
-.deals-card {
-  flex: 0 0 auto;
-  background: #fff;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-}
-.deals-banner img {
-  display: block;
-}
-
-/* Hide scrollbar */
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.hide-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-/* Top Categories Style */
-.category-box {
-  padding: 10px 15px;
+.fruits-category-wrapper {
+  position: relative;
   background: white;
-  border-radius: 10px;
-  transition: all 0.3s ease;
-}
-.category-box:hover {
-  background: #f2f2f2;
-}
-
-/* Active top category */
-.active-category {
-  background: #f7e1ff;
-}
-
-/* Fruits Categories style */
-.text-center img {
+  padding: 20px 10px 10px;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  transition: transform 0.2s;
-}
-.text-center img:hover {
-  transform: scale(1.05);
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+  margin-bottom: 30px;
 }
 
-/* Deal Cards */
-.deals-card img {
-  border-radius: 12px;
-  object-fit: cover;
+.fruits-category-scroll {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  overflow-y: hidden; /* ✅ prevents vertical scrollbar */
+  padding: 0 10px;
+
+  /* ✅ Hide scrollbars - cross-browser */
+  scrollbar-width: none;        /* Firefox */
+  -ms-overflow-style: none;     /* IE & Edge */
 }
 
-/* Banner Section */
-.paan-banner img {
-  width: 100%;
-  border-radius: 12px;
-  margin-top: 10px;
+.fruits-category-scroll::-webkit-scrollbar {
+  display: none;                /* Chrome, Safari */
 }
 
-/* Info Cards (Insurance / Hotstar / Forex) */
-.info-card img {
-  border-radius: 12px;
-}
-
-/* Responsive tweaks */
-@media (max-width: 768px) {
-  .category-box span {
-    font-size: 14px;
-  }
-}
-/* Clean scrollbar hiding */
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.hide-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-/* Fruits Categories Clean UI */
 .fruits-category-item {
-  min-width: 110px;
+  flex: 0 0 auto;
+  text-align: center;
   cursor: pointer;
+  width: 100px;
 }
 
 .fruits-category-card {
-  background-color: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  background: #f9f9f9;
+  border-radius: 16px;
   padding: 5px;
-  transition: transform 0.2s ease;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .fruits-category-card:hover {
-  transform: translateY(-3px); /* Just a slight bounce if you want, optional */
+  transform: translateY(-4px);
+  background: #fff;
 }
 
 .fruits-category-img {
-  width: 110px;
-  height: 110px;
+  width: 140px;
+  height: 120px;
   object-fit: contain;
   margin-bottom: 5px;
 }
 
 .fruits-category-name {
   font-size: 14px;
+  color: #222;
+  font-weight: 500;
+  margin-top: 4px;
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+.scroll-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  font-size: 18px;
+  z-index: 2;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.scroll-btn.left {
+  left: 5px;
+}
+
+.scroll-btn.right {
+  right: 5px;
+}
+
+.product-card-mini {
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 8px;
+  background: white;
+  height: 270px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.mini-img {
+  width: 100%;
+  height: 140px;
+  object-fit: contain;
+  margin-bottom: 6px;
+  border-radius: 10px;
+}
+
+.mini-body {
+  font-size: 13px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.discount-badge {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  font-size: 11px;
   font-weight: 600;
-  color: #333;
-  text-align: center;
-}
-
-.hide-scrollbar {
-  scrollbar-width: none;
-}
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
-.product-card:hover {
-  transform: scale(1.02);
-  transition: 0.2s ease-in-out;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.text-purple {
-  color: #8000ff;
-}
-
-.bg-purple {
   background-color: #8000ff;
+  color: white;
+  padding: 3px 5px;
+  border-radius: 4px;
 }
 
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
+/* Red Zepto-style Add to Cart button */
+.btn-outline-primary {
+  color: #d80073 !important;
+  border: 1.5px solid #d80073 !important;
+  background: transparent;
 }
 
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.hide-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-footer h5 {
-  color: #000;
-}
-footer h6 {
-  color: #333;
-}
-footer p {
-  color: #666;
+.btn-outline-primary:hover {
+  background-color: #d80073 !important;
+  color: white !important;
 }
 
-.how-it-works-card {
-  transition: transform 0.2s ease-in-out;
-}
-.how-it-works-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+/* Remove row spacing */
+.row.g-3 {
+  --bs-gutter-y: 0 !important;
 }

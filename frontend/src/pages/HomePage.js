@@ -120,7 +120,6 @@ const HomePage = () => {
 
   return (
     <Container className="pt-3 pb-5">
-      {/* ... all your category banners, sliders, and sections above remain same ... */}
       <div
         className="d-flex overflow-auto p-3 bg-white shadow-sm mb-4 hide-scrollbar"
         style={{ whiteSpace: "nowrap" }}
@@ -212,11 +211,12 @@ const HomePage = () => {
         {/* <div className="paan-banner-content d-flex align-items-center justify-content-between p-4"> */}
         <div>
           <div>
+              <a href="https://www.zepto.com/cn/paan-corner/cigarettes/cid/cd50825e-baf8-47fe-9abc-ed9556122a9a/scid/5bcbee47-7c83-4279-80f0-7ecc068496df" target="_blank" rel="noopener noreferrer" >
             <img
               src="/Banner/Paan_Corner.webp"
               alt="Paan Corner"
               style={{ maxWidth: "2200px", height: "auto" }}
-            />
+            /></a>
           </div>
         </div>
       </div>
@@ -416,20 +416,31 @@ const HomePage = () => {
       {/* Insurance + JioHotstar + Forex + Bank Cards Section */}
       <Row className="my-4 g-3">
         <Col md={3} sm={6} xs={12}>
-          <div
-            className="info-card shadow-sm rounded"
-            style={{ overflow: "hidden", background: "#f7f7f7" }}
-          >
-            <img
-              src="/Cards/LifeCover.webp"
-              alt="Life Cover"
-              style={{ width: "100%", height: "auto", display: "block" }}
-            />
-          </div>
+          <a
+  href="https://apply.scapia.cards/landing_page?campaign_image_asset=v1744873027%2Fspitha_prod_uploads%2F2025_04%2FScapiaforex2_1744873025455.webp&utm_source=Zepto&utm_content=Forex_NHC"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  <div 
+    className="info-card shadow-sm rounded"
+    style={{ overflow: "hidden", background: "#f7f7f7" }}
+  >
+    <img
+      src="/Cards/LifeCover.webp"
+      alt="Life Cover"
+      style={{ width: "100%", height: "auto", display: "block" }}
+    />
+  </div>
+</a>
+
         </Col>
 
         <Col md={3} sm={6} xs={12}>
-          <div
+             <a
+  href="https://www.axismaxlife.com/term-insurance-plans/premium-calculator?utmCode=143713627&utm_source=Partnership_Zepto&utm_medium=Display&utm_content=StaticBanner&utm_theme=2Crore&utm_term=2Cr_876PM_Static_NewParent_NonRS_110325"
+  target="_blank"
+  rel="noopener noreferrer"
+> <div
             className="info-card shadow-sm rounded"
             style={{ overflow: "hidden", background: "#f7f7f7" }}
           >
@@ -438,10 +449,16 @@ const HomePage = () => {
               alt="JioHotstar"
               style={{ width: "100%", height: "auto", display: "block" }}
             />
-          </div>
+          </div></a>
+         
         </Col>
 
         <Col md={3} sm={6} xs={12}>
+                 <a
+  href="https://www.bajajfinserv.in/webform/v1/emicard/login?utm_source=Partner5&utm_medium=banner&utm_campaign=HHI"
+  target="_blank"
+  rel="noopener noreferrer"
+> 
           <div
             className="info-card shadow-sm rounded"
             style={{ overflow: "hidden", background: "#f7f7f7" }}
@@ -452,9 +469,15 @@ const HomePage = () => {
               style={{ width: "100%", height: "auto", display: "block" }}
             />
           </div>
+          </a>
         </Col>
 
         <Col md={3} sm={6} xs={12}>
+                 <a
+  href="https://www.tataneu.com/creditcard/?utm_source=Partnerships_external&utm_medium=Zepto&utm_campaign=Zepto_April_25"
+  target="_blank"
+  rel="noopener noreferrer"
+> 
           <div
             className="info-card shadow-sm rounded"
             style={{ overflow: "hidden", background: "#f7f7f7" }}
@@ -463,8 +486,10 @@ const HomePage = () => {
               src="/Cards/SavingAcc.webp"
               alt="Bank Savings"
               style={{ width: "100%", height: "auto", display: "block" }}
+
             />
           </div>
+          </a>
         </Col>
       </Row>
 
